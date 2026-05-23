@@ -17,7 +17,7 @@ import { sigmaUK } from "./canon/sigma-uk.js";
 
 let responseHeaders = {
     // 'Content-Security-Policy': `default-src 'none' ; script-src 'self' ; connect-src https: ; img-src https: blob: data: ; style-src 'self' ; frame-ancestors 'none' ; form-action 'self' ; base-uri 'none'`,
-    'Content-Security-Policy': `default-src 'self' ; connect-src https: ; img-src https: blob: data: ; frame-ancestors 'none' ; form-action 'self' ; base-uri 'none'`,
+    'Content-Security-Policy': "default-src 'self' ; connect-src https: ; img-src https: blob: data: ; frame-ancestors 'none' ; form-action 'self' ; base-uri 'none'",
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'X-Content-Type-Options': 'nosniff'
 };
