@@ -220,9 +220,6 @@ async function handler(req, info) {
         if (!skipLog(req)) {
             console.log(` 👀 ${remoteAddr(info).remoteIp} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
         }
-
-        console.log(' * CSP: \nContent-Security-Policy: ', responseHeaders['Content-Security-Policy'], ' \n', responseHeadersArr.join(';    '));
-
         return await serveDir(req, {
             urlRoot: '',
             fsRoot: 'static',
