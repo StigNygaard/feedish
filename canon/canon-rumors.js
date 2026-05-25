@@ -22,6 +22,7 @@ const skipCategories = [
     'dealzone',
     'featured deal',
     'buyers guide',
+    'buying guide',
     'smart picks',
     'third party software',
     'third party lenses',
