@@ -12,8 +12,8 @@
     "entrypoint": "main.js"
   },
   "imports": {
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
-    "@std/http": "jsr:@std/http@^1.1.0",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.7",
+    "@std/http": "jsr:@std/http@^1.1.1",
     "@thednp/domparser": "npm:@thednp/domparser@^0.1.9",
     "feedsmith": "npm:feedsmith@^2.9.4"
   }
