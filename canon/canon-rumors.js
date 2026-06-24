@@ -21,6 +21,8 @@ const skipCategories = [
     'deal zone',
     'dealzone',
     'featured deal',
+    'exclusive deals',
+    'prime day',
     'buyers guide',
     'buying guide',
     'smart picks',
