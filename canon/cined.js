@@ -19,7 +19,7 @@ const matchMountRegex = feeding.wordMatchRegex('mount');
  * @type {string[]}
  */
 const skipCategories = [
-    // for future categories to ignore?
+    'deal'
 ];
 
 /**
