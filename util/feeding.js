@@ -21,6 +21,17 @@ export function wordMatchRegex(word, modifier = 'iu') {
 }
 
 /**
+ * Check if the content of arrays differs.
+ * (Comparing as JSON values - with the limitations of that method)
+ */
+export function arraysDiffers(arr1 = [], arr2=[]) {
+    if (arr1.length !== arr2.length) return true;
+    return JSON.stringify(arr1) !== JSON.stringify(arr2);
+    // Other ways: https://www.syncfusion.com/blogs/post/deep-compare-javascript-objects
+}
+
+
+/**
  * Checks if str is a date in RFC 2822 date format
  * @param str {string}
  * @returns {boolean}

@@ -80,7 +80,7 @@ async function handler(req, info) {
 
     function skipLog(req) {
         return /\.[a-zA-Z]{2,3}$/.test(req.url) // skip logging files with 2-3 characters extension (a very quick filtering of log😉)
-            || ( // and got tired of this stupid client constant visting...
+            || ( // and got tired of this stupid client constant visiting...
                 req.url === 'https://feedish.stignygaard.deno.net:443/'
                 && req.headers?.get('referer') === 'http://feedish.stignygaard.deno.net'
                 && req.headers?.get('user-agent') === 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
@@ -95,126 +95,126 @@ async function handler(req, info) {
         /* Feed: Canon Rumors - Essential posts only */
         let feedType = crPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (crPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for CRNEWS by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for CRNEWS by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await canonRumors(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for CRNEWS`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for CRNEWS ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Canon Rumors Forum - New threads (topics) */
         feedType = crforumPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (crforumPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for CRFORUM by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for CRFORUM by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await canonRumorsForum(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for CRFORUM`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for CRFORUM ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Y.M. Cinema - Canon related only */
         feedType = ymcPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (ymcPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for YMCINEMA by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for YMCINEMA by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await ymCinema(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for YMCINEMA`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for YMCINEMA ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: CineD - Canon related only */
         feedType = cinedPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (cinedPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for CINED by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for CINED by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await cineD(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for CINED`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for CINED ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: OpticalLimits - Canon mount lens reviews */
         feedType = opticallimitsPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (opticallimitsPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for OPTLIMITS by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for OPTLIMITS by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await opticalLimits(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for OPTLIMITS`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for OPTLIMITS ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Image Sensor World - Canon related only */
         feedType = iswPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (iswPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for ISWORLD by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for ISWORLD by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await isWorld(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for ISWORLD`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for ISWORLD ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Photons to Photos (Sensor updates) - Canon related only */
         feedType = p2psensorPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (p2psensorPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for P2PSENSOR by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for P2PSENSOR by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await p2pSensor(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for P2PSENSOR`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for P2PSENSOR ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: EOS Magazine News */
         feedType = eosmagPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (eosmagPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for EOSMAG by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for EOSMAG by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await eosMagazine(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for EOSMAG`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for EOSMAG ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Sigma UK News */
         feedType = sigmaukPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (sigmaukPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for SIGMAUK by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for SIGMAUK by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await sigmaUK(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for SIGMAUK`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for SIGMAUK ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Canon EOS R Talk - DPReview Forums */
         feedType = dprforumeosrPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (dprforumeosrPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for DPRFORUMEOSR by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for DPRFORUMEOSR by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await dprForumEosR(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for DPRFORUMEOSR`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPRFORUMEOSR ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Canon PowerShot Talk - DPReview Forums */
         feedType = dprforumpowershotPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (dprforumpowershotPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for DPRFORUMPOWERSHOT by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for DPRFORUMPOWERSHOT by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await dprForumPowershot(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for DPRFORUMPOWERSHOT`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPRFORUMPOWERSHOT ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: NEW DPReview Forums ALL */
         feedType = dprforumallPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (dprforumallPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for DPRFORUMALL by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for DPRFORUMALL by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await dprForumAll(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for DPRFORUMALL`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPRFORUMALL ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: Canon PowerShot Talk - DPReview Forums */
         feedType = nikkeiPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (nikkeiPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for NIKKEI by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for NIKKEI by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await nikkeiAsia(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for NIKKEI`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for NIKKEI ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
         /* Feed: ASUSWRT Forums */
         feedType = asuswrtPathPattern.exec(urlObj)?.pathname?.groups?.type;
         if (feedType) { // if (asuswrtPathPattern.test(urlObj)) ...
-            console.log(` 🤖 ${feedType.toUpperCase()} feed request for ASUSWRT by: ${req.headers?.get('User-Agent') ?? ''}`);
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for ASUSWRT by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await asuswrtForum(feedType, req.headers, info, isLocalhost);
-            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed created for ASUSWRT`);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for ASUSWRT ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 

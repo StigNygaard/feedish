@@ -63,22 +63,27 @@ async function feedItems() {
         }
     }
     if (relevantItems.length) {
-        if (relevantItems.length > cachedItems.length) {
-            console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
-        }
-        let cached = {};
-        try {
-            cached = await caching.set(cacheId, {
-                cachedTime: feedRequestTime,
-                cachedItems: relevantItems.slice(0, feedLength)
-            });
-        } catch (err) {
-            console.error(` 💣 Error when trying to update cache for ${sourceLabel}!`, err);
-        }
-        if (cached?.ok) {
-            console.log(` 🤖 Cache for ${sourceLabel} was ${sourceItems?.length ? 'updated' : '"extended"'}. ${cached.info}.`);
+        if (feeding.arraysDiffers(relevantItems, cachedItems)) {
+            if (relevantItems.length > cachedItems.length) {
+                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
+            }
+            let cached = {};
+            try {
+                cached = await caching.set(cacheId, {
+                    cachedTime: feedRequestTime,
+                    cachedItems: relevantItems.slice(0, feedLength)
+                });
+            } catch (err) {
+                console.error(` 💣 Error when trying to update cache for ${sourceLabel}!`, err);
+            }
+            if (cached?.ok) {
+                console.log(` 🤖 Cache for ${sourceLabel} was ${sourceItems?.length ? 'updated' : '"extended"'}. ${cached.info}.`);
+            } else {
+                console.warn(` 💣 Failed updating cache for ${sourceLabel}!`)
+            }
         } else {
-            console.warn(` 💣 Failed updating cache for ${sourceLabel}!`)
+            // temp log unnecessary write skipped
+            console.info(`SKIPPED UNNECESSARY CACHE WRITE for ${sourceLabel}.`)
         }
     }
     return relevantItems;

@@ -1,6 +1,6 @@
 import * as feeding from './../util/feeding.js';
 import * as caching from './../util/caching.js';
-import { shortDateTime } from '../static/datetime.js';
+import {shortDateTime} from '../static/datetime.js';
 
 const sourceFeed1 = 'https://www.dpreview.com/feeds/forums/1070'; // EOS R
 // const sourceFeed1 = 'https://www.dpreview.com/forums/forums/canon-eos-r-talk.1070/index.rss?order=post_date'; // Future EOS R - NOT YET FOUND!?
@@ -42,7 +42,7 @@ async function feedItems(sourceFeed, sourceLabel, cacheId, cacheMinutes, feedLen
     // console.log(` 🤖 CACHED CONTENT FROM ${cachedTime} WAS READ`);
 
     if (cachedItems?.length && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
-        console.log(` 🤖 For ${sourceLabel}, just use the recently updated (${shortDateTime(cachedTime,'shortOffset')}) CACHED ITEMS`);
+        console.log(` 🤖 For ${sourceLabel}, just use the recently updated (${shortDateTime(cachedTime, 'shortOffset')}) CACHED ITEMS`);
         return cachedItems;
     }
 
@@ -58,22 +58,29 @@ async function feedItems(sourceFeed, sourceLabel, cacheId, cacheMinutes, feedLen
         }
     }
     if (relevantItems.length) {
-        if (relevantItems.length > cachedItems.length) {
-            console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
-        }
-        let cached = {};
-        try {
-            cached = await caching.set(cacheId, {
-                cachedTime: feedRequestTime,
-                cachedItems: relevantItems.slice(0, feedLength)
-            });
-        } catch (err) {
-            console.error(` 💣 Error when trying to update cache for ${sourceLabel}!`, err);
-        }
-        if (cached?.ok) {
-            console.log(` 🤖 Cache for ${sourceLabel} was ${sourceItems?.length ? 'updated' : '"extended"'}. ${cached.info}.`);
+
+        if (feeding.arraysDiffers(relevantItems, cachedItems)) {
+
+            if (relevantItems.length > cachedItems.length) {
+                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
+            }
+            let cached = {};
+            try {
+                cached = await caching.set(cacheId, {
+                    cachedTime: feedRequestTime,
+                    cachedItems: relevantItems.slice(0, feedLength)
+                });
+            } catch (err) {
+                console.error(` 💣 Error when trying to update cache for ${sourceLabel}!`, err);
+            }
+            if (cached?.ok) {
+                console.log(` 🤖 Cache for ${sourceLabel} was ${sourceItems?.length ? 'updated' : '"extended"'}. ${cached.info}.`);
+            } else {
+                console.warn(` 💣 Failed updating cache for ${sourceLabel}!`)
+            }
         } else {
-            console.warn(` 💣 Failed updating cache for ${sourceLabel}!`)
+            // temp log unnecessary write skipped
+            console.info(`SKIPPED UNNECESSARY CACHE WRITE for ${sourceLabel}.`)
         }
     }
     return relevantItems;
@@ -110,7 +117,7 @@ export async function dprForumEosR(feedType, reqHeaders, info, logging = false) 
     for (const item of latestRelevantItems) {
         feedData.items.push(CreateFeedTool.createItem(item));
     }
-    const responseBody = CreateFeedTool.createResponseBody(feedData, { lenient: true });
+    const responseBody = CreateFeedTool.createResponseBody(feedData, {lenient: true});
     return {
         body: responseBody,
         options: {
@@ -153,7 +160,7 @@ export async function dprForumPowershot(feedType, reqHeaders, info, logging = fa
     for (const item of latestRelevantItems) {
         feedData.items.push(CreateFeedTool.createItem(item));
     }
-    const responseBody = CreateFeedTool.createResponseBody(feedData, { lenient: true });
+    const responseBody = CreateFeedTool.createResponseBody(feedData, {lenient: true});
     return {
         body: responseBody,
         options: {
