@@ -45,7 +45,7 @@ function inUnwantedCategory(item) {
     const hasCanonReference = matchCanonRegex.test(title) || matchEosRegex.test(title) || matchRfRegex.test(title) || matchEfRegex.test(title) ||
         categories.some(category => {
             const cat = category.name.trim().toLowerCase();
-            return matchCanonRegex.test(cat) || matchEosRegex.test(cat) || matchRfRegex.test(cat) || matchEfRegex.test(cat);
+            return matchCanonRegex.test(cat); // || matchEosRegex.test(cat) || matchRfRegex.test(cat) || matchEfRegex.test(cat);
         });
     let unwanted = false;
     for (const category of categories) {
@@ -54,9 +54,9 @@ function inUnwantedCategory(item) {
         if (skipCategories.some(skipCategory => categoryName.includes(skipCategory))) {
             // Unwanted - except if it is a "featured industry..." or "third party..." category combined with a Canon reference:
             unwanted ||= !(
-                categoryName.includes('featured industry') && hasCanonReference ||
+                categoryName.includes('industry news') && hasCanonReference ||
                 categoryName.includes('third party') && hasCanonReference
-            );
+            ); // TODO fix bad logic here!?
         }
     }
     return unwanted;
@@ -116,6 +116,7 @@ async function feedItems() {
             console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
         }
         let cached = {};
+        // TODO only if new<>old! ...
         try {
             cached = await caching.set(cacheId, {
                 cachedTime: feedRequestTime,
