@@ -6,6 +6,7 @@ import { ymCinema } from './canon/ymcinema.js';
 import { cineD } from "./canon/cined.js";
 import { isWorld } from './canon/image-sensor-world.js';
 import { p2pSensor } from './canon/p2psensor.js';
+import { dpreview } from './canon/dpreview.js';
 import { dprForumEosR, dprForumPowershot } from './canon/dpreview-forum.js';
 import { dprForumAll } from './canon/dpreview-forum-all.js';
 import { opticalLimits } from './canon/opticallimits.js';
@@ -38,6 +39,7 @@ const p2psensorPathPattern = new URLPattern({ pathname: "/canon/p2psensorfeed.:t
 const dprforumeosrPathPattern = new URLPattern({ pathname: "/canon/dprfeosrfeed.:type(json|rss)" });
 const dprforumpowershotPathPattern = new URLPattern({ pathname: "/canon/dprfpowershotfeed.:type(json|rss)" });
 const dprforumallPathPattern = new URLPattern({ pathname: "/canon/dprfallfeed.:type(json|rss)" });
+const dpreviewPathPattern = new URLPattern({ pathname: "/canon/dpreviewfeed.:type(json|rss)" });
 const opticallimitsPathPattern = new URLPattern({ pathname: "/canon/optlimitsfeed.:type(json|rss)" });
 const nikkeiPathPattern = new URLPattern({ pathname: "/canon/nikkeifeed.:type(json|rss)" });
 const eosmagPathPattern = new URLPattern({ pathname: "/canon/eosmagfeed.:type(json|rss)" });
@@ -161,6 +163,15 @@ async function handler(req, info) {
             console.log(` 🤖 * ${feedType.toUpperCase()} feed request for EOSMAG by: ${req.headers?.get('User-Agent') ?? ''}`);
             const result = await eosMagazine(feedType, req.headers, info, isLocalhost);
             console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for EOSMAG ready to be served.`);
+            return new Response(result.body, { headers: responseHeaders, ...result.options });
+        }
+
+        /* Feed: DPReview */
+        feedType = dpreviewPathPattern.exec(urlObj)?.pathname?.groups?.type;
+        if (feedType) { // if (dpreviewPathPattern.test(urlObj)) ...
+            console.log(` 🤖 * ${feedType.toUpperCase()} feed request for DPREVIEW by: ${req.headers?.get('User-Agent') ?? ''}`);
+            const result = await dpreview(feedType, req.headers, info, isLocalhost);
+            console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPREVIEW ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
 
