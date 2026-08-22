@@ -18,11 +18,14 @@ const skipCategories = [
 ];
 
 /**
- * Returns if a post/item belongs to some unwanted category
+ * Returns if a post/item belongs to some unwanted category - or if for some other reason is unwanted
  * @param item {Object}
  * @returns {boolean}
  */
-function inUnwantedCategory(item) {
+function isUnwanted(item) {
+    if (!item.comments) {
+        return true; // no comments url => probably a sponsored article or a shopping guide
+    }
     let unwanted = false;
     if (skipCategories.length) {
         for (const category of item.categories) {
@@ -49,7 +52,7 @@ function filteredItemList(items, maxLength = feedLength) {
             || matchCanonRegex.test(item.title ?? '')
             || matchCanonRegex.test(item.description ?? '')
         ) {
-            if (!inUnwantedCategory(item)) {
+            if (!isUnwanted(item)) {
                 if (filteredList.length < maxLength) filteredList.push(item);
             }
         }
