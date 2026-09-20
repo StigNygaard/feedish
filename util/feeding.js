@@ -231,9 +231,9 @@ export function getCreateFeedTool(feedType, feedTitle, feedDescription, feedUrl,
     // FAR from perfect, but while waiting for https://github.com/macieklamberski/feedsmith/issues/6 ?
     const matchEmailRegexp = /(?:^|\s|<|\()([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63})(?:$|\s|>|\))/gu;
     function authorName(item) {
-        // Quick fix to return an item-author *without* an eventual email-address included in value. // TODO
-        // Hoping for something better with: https://github.com/macieklamberski/feedsmith/issues/6
-        let name = (item.dc?.creators?.at(0) ?? item.authors?.at(0) ?? genericAuthorName ?? '').replaceAll(matchEmailRegexp, '');
+        // Quick fix to return an item-author *without* an eventual email-address included in value.
+        // TODO skulle være overflødig nu (https://feedsmith.dev/migration/v2-to-v3#rss-person-fields-changed-from-strings-to-objects) medmindre dc.creators stadig kan indeholde email og <([])> ?
+        let name = (item.dc?.creators?.at(0) ?? item.authors?.at(0)?.name ?? genericAuthorName ?? '').replaceAll(matchEmailRegexp, '');
         name = name.replaceAll(/[><)(\]\[]*/gu, '');
         return name.trim();
     }

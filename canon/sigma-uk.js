@@ -141,7 +141,7 @@ export async function sigmaUK(feedType, reqHeaders, info, logging = false) {
     for (const item of latestRelevantItems) {
         feedData.items.push(CreateFeedTool.createItem(item));
     }
-    const responseBody = CreateFeedTool.createResponseBody(feedData, { lenient: true });
+    const responseBody = CreateFeedTool.createResponseBody(feedData, {});
     return {
         body: responseBody,
         options: {

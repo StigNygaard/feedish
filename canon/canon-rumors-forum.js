@@ -18,7 +18,7 @@ const feedLength = 12;
  */
 function isCommentThread(item) {
     return /full\sarticle\s?(\.\.\.)?<\/a><\/div>$/i.test(item.content?.encoded?.trim())
-        || (item.authors?.at(0)?.endsWith('(Richard CR)'));
+        || (item.authors?.at(0)?.name?.endsWith('(Richard CR)'));
 }
 
 /**
@@ -151,7 +151,7 @@ export async function canonRumorsForum(feedType, reqHeaders, info, logging = fal
     for (const item of latestRelevantItems) {
         feedData.items.push(CreateFeedTool.createItem(item));
     }
-    const responseBody = CreateFeedTool.createResponseBody(feedData, { lenient: true });
+    const responseBody = CreateFeedTool.createResponseBody(feedData, {});
     return {
         body: responseBody,
         options: {
