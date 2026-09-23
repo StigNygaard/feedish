@@ -86,8 +86,8 @@ function tweakItems(items) {
     for (const item of items) {
         if (!item.description?.trim()) {
             if (item.content?.encoded) {
-                // Extract plain text (html stripped) and possible image link from content.encoded...
-                const { textContent, imageSrc } = feeding.extract(`<html>${item.content.encoded}</html>`);
+                const textContent = feeding.stripHtml(`<html>${item.content.encoded}</html>`);
+                // const { textContent, imageSrc } = feeding.extract(`<html>${item.content.encoded}</html>`);
                 if (textContent?.length) {
                     item.description = textContent.substring(0, 500);
                 }
