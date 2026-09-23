@@ -79,6 +79,30 @@ function filteredItemList(items, maxLength = feedLength) {
 }
 
 /**
+ * Tweak items...
+ * @param items {Object[]}
+ * @returns {Object[]} */
+function tweakItems(items) {
+    for (const item of items) {
+        if (!item.description?.trim()) {
+            if (item.content?.encoded) {
+                // Extract plain text (html stripped) and possible image link from content.encoded...
+                const { textContent, imageSrc } = feeding.extract(`<html>${item.content.encoded}</html>`);
+                if (textContent?.length) {
+                    item.description = textContent.substring(0, 500);
+                }
+                // if (imageSrc && !item._image) {
+                //     item._image = imageSrc;
+                // }
+            }
+        }
+        delete item.content;
+        item.description ??= '';
+    }
+    return items;
+}
+
+/**
  * Returns a list of relevant (filtered) feed items
  * @returns {Promise<Object[]>}
  */
@@ -91,7 +115,7 @@ async function feedItems() {
         cachedTime = new Date(cached.cachedTime);
     }
     if (cached?.cachedItems) {
-        cachedItems = filteredItemList(cached.cachedItems);
+        cachedItems = tweakItems(filteredItemList(cached.cachedItems));
     }
     // console.log(` 🤖 CACHED CONTENT FROM ${cachedTime} WAS READ`);
 
@@ -103,7 +127,7 @@ async function feedItems() {
     const sourceItems = await feeding.getParsedSourceItems(sourceFeed);
     let relevantItems = [];
     if (sourceItems?.length) {
-        relevantItems = filteredItemList(sourceItems);
+        relevantItems = tweakItems(filteredItemList(sourceItems));
     }
 
     for (const item of cachedItems) {
