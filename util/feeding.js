@@ -8,6 +8,7 @@ export const fetcherUserAgent = Deno.env.get('feedish_fetcher_useragent');
 const feedFetcherHeaders = new Headers({});
 if (fetcherUserAgent) {
     feedFetcherHeaders.set('User-Agent', fetcherUserAgent);
+    // feedFetcherHeaders.set('Accept', 'application/rss+xml');
 }
 
 /**

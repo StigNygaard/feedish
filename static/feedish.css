@@ -13,6 +13,16 @@
 
   background-color: var(--back-color);
   color: var(--font-color);
+  scroll-behavior: smooth;
+}
+
+:target {
+  scroll-margin: 25px;
+  /*scroll-margin: 1.5rlh; !* rlh: Firefox 120+, Chromium 111+ *!*/
+  /*
+  outline: 3px solid red;
+  outline-offset: 3px;
+  */
 }
 
 body {

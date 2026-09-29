@@ -1,20 +1,17 @@
 import { serveDir } from '@std/http/file-server';
 import '@std/dotenv/load';
 import { canonRumors } from './canon/canon-rumors.js';
-// import { canonRumorsForum } from './canon/canon-rumors-forum.js';
 import { ymCinema } from './canon/ymcinema.js';
 import { cineD } from "./canon/cined.js";
 import { isWorld } from './canon/image-sensor-world.js';
 import { p2pSensor } from './canon/p2psensor.js';
 import { dpreview } from './canon/dpreview.js';
-// import { dprForumEosR, dprForumPowershot } from './canon/dpreview-forum.js';
 import { dprForumAll } from './canon/dpreview-forum-all.js';
 import { opticalLimits } from './canon/opticallimits.js';
 import { shortDateTime } from './static/datetime.js';
 import { nikkeiAsia } from "./canon/asia-nikkei.js";
 import { eosMagazine } from "./canon/eos-magazine.js";
 import { asuswrtForum } from "./misc/asuswrt.js";
-// import { sigmaUK } from "./canon/sigma-uk.js";
 
 let responseHeaders = {
     // 'Content-Security-Policy': `default-src 'none' ; script-src 'self' ; connect-src https: ; img-src https: blob: data: ; style-src 'self' ; frame-ancestors 'none' ; form-action 'self' ; base-uri 'none'`,
@@ -31,19 +28,15 @@ let responseHeadersArr = Object.entries(responseHeaders).map(([k, v]) => `${k}: 
 // const mainStaticPathPattern = new URLPattern({ pathname: "/:file?" });
 // CANON related:
 const crPathPattern = new URLPattern({ pathname: "/canon/crfeed.:type(json|rss)" });
-// const crforumPathPattern = new URLPattern({ pathname: "/canon/crforumfeed.:type(json|rss)" });
 const ymcPathPattern = new URLPattern({ pathname: "/canon/ymcfeed.:type(json|rss)" });
 const cinedPathPattern = new URLPattern({ pathname: "/canon/cinedfeed.:type(json|rss)" });
 const iswPathPattern = new URLPattern({ pathname: "/canon/iswfeed.:type(json|rss)" });
 const p2psensorPathPattern = new URLPattern({ pathname: "/canon/p2psensorfeed.:type(json|rss)" });
-// const dprforumeosrPathPattern = new URLPattern({ pathname: "/canon/dprfeosrfeed.:type(json|rss)" });
-// const dprforumpowershotPathPattern = new URLPattern({ pathname: "/canon/dprfpowershotfeed.:type(json|rss)" });
 const dprforumallPathPattern = new URLPattern({ pathname: "/canon/dprfallfeed.:type(json|rss)" });
 const dpreviewPathPattern = new URLPattern({ pathname: "/canon/dpreviewfeed.:type(json|rss)" });
 const opticallimitsPathPattern = new URLPattern({ pathname: "/canon/optlimitsfeed.:type(json|rss)" });
 const nikkeiPathPattern = new URLPattern({ pathname: "/canon/nikkeifeed.:type(json|rss)" });
 const eosmagPathPattern = new URLPattern({ pathname: "/canon/eosmagfeed.:type(json|rss)" });
-// const sigmaukPathPattern = new URLPattern({ pathname: "/canon/sigmaukfeed.:type(json|rss)" });
 // MISC:
 const asuswrtPathPattern = new URLPattern({ pathname: "/misc/asuswrtfeed.:type(json|rss)" });
 
@@ -102,15 +95,6 @@ async function handler(req, info) {
             console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for CRNEWS ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
-
-        /* Feed: Canon Rumors Forum - New threads (topics) */
-        // feedType = crforumPathPattern.exec(urlObj)?.pathname?.groups?.type;
-        // if (feedType) { // if (crforumPathPattern.test(urlObj)) ...
-        //     console.log(` 🤖 * ${feedType.toUpperCase()} feed request for CRFORUM by: ${req.headers?.get('User-Agent') ?? ''}`);
-        //     const result = await canonRumorsForum(feedType, req.headers, info, isLocalhost);
-        //     console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for CRFORUM ready to be served.`);
-        //     return new Response(result.body, { headers: responseHeaders, ...result.options });
-        // }
 
         /* Feed: Y.M. Cinema - Canon related only */
         feedType = ymcPathPattern.exec(urlObj)?.pathname?.groups?.type;
@@ -174,33 +158,6 @@ async function handler(req, info) {
             console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPREVIEW ready to be served.`);
             return new Response(result.body, { headers: responseHeaders, ...result.options });
         }
-
-        /* Feed: Sigma UK News */
-        // feedType = sigmaukPathPattern.exec(urlObj)?.pathname?.groups?.type;
-        // if (feedType) { // if (sigmaukPathPattern.test(urlObj)) ...
-        //     console.log(` 🤖 * ${feedType.toUpperCase()} feed request for SIGMAUK by: ${req.headers?.get('User-Agent') ?? ''}`);
-        //     const result = await sigmaUK(feedType, req.headers, info, isLocalhost);
-        //     console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for SIGMAUK ready to be served.`);
-        //     return new Response(result.body, { headers: responseHeaders, ...result.options });
-        // }
-
-        /* Feed: Canon EOS R Talk - DPReview Forums */
-        // feedType = dprforumeosrPathPattern.exec(urlObj)?.pathname?.groups?.type;
-        // if (feedType) { // if (dprforumeosrPathPattern.test(urlObj)) ...
-        //     console.log(` 🤖 * ${feedType.toUpperCase()} feed request for DPRFORUMEOSR by: ${req.headers?.get('User-Agent') ?? ''}`);
-        //     const result = await dprForumEosR(feedType, req.headers, info, isLocalhost);
-        //     console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPRFORUMEOSR ready to be served.`);
-        //     return new Response(result.body, { headers: responseHeaders, ...result.options });
-        // }
-
-        /* Feed: Canon PowerShot Talk - DPReview Forums */
-        // feedType = dprforumpowershotPathPattern.exec(urlObj)?.pathname?.groups?.type;
-        // if (feedType) { // if (dprforumpowershotPathPattern.test(urlObj)) ...
-        //     console.log(` 🤖 * ${feedType.toUpperCase()} feed request for DPRFORUMPOWERSHOT by: ${req.headers?.get('User-Agent') ?? ''}`);
-        //     const result = await dprForumPowershot(feedType, req.headers, info, isLocalhost);
-        //     console.log(` 🤖 Complete ${feedType.toUpperCase()} feed for DPRFORUMPOWERSHOT ready to be served.`);
-        //     return new Response(result.body, { headers: responseHeaders, ...result.options });
-        // }
 
         /* Feed: NEW DPReview Forums ALL */
         feedType = dprforumallPathPattern.exec(urlObj)?.pathname?.groups?.type;
