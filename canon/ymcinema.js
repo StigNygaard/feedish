@@ -112,7 +112,7 @@ async function feedItems() {
     if (relevantItems.length) {
         if (feeding.arraysDiffers(relevantItems, cachedItems)) {
             if (relevantItems.length > cachedItems.length) {
-                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
+                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed at ${shortDateTime(new Date(),'shortOffset')}!`);
             }
             let cached = {};
             try {
