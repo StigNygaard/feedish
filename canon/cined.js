@@ -13,6 +13,7 @@ const matchEosRegex = feeding.wordMatchRegex('eos');
 const matchRfRegex = feeding.wordMatchRegex('rf');
 const matchLensRegex = feeding.wordMatchRegex('lens');
 const matchMountRegex = feeding.wordMatchRegex('mount');
+const matchMountsRegex = feeding.wordMatchRegex('mounts');
 
 /**
  * Unwanted categories of posts to be ignored (lowercase)
@@ -51,9 +52,10 @@ function filteredItemList(items, maxLength = feedLength) {
     const filteredList = [];
     for (const item of items) {
         const title = item.title?.toLowerCase() ?? '';
-        const hasCanonTitleReference = matchCanonRegex.test(title) || matchEosRegex.test(title)
+        const hasCanonReference = item.categories?.some(category => category?.name.trim().toLowerCase() === 'canon')
+            || matchCanonRegex.test(title) || matchEosRegex.test(title)
             || matchRfRegex.test(title) && (matchLensRegex.test(title) || matchMountRegex.test(title));
-        if (hasCanonTitleReference && !inUnwantedCategory(item)) {
+        if (hasCanonReference && !inUnwantedCategory(item)) {
             if (filteredList.length < maxLength) filteredList.push(item);
         }
     }
@@ -117,7 +119,7 @@ async function feedItems() {
     if (relevantItems.length) {
         if (feeding.arraysDiffers(relevantItems, cachedItems)) {
             if (relevantItems.length > cachedItems.length) {
-                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
+                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed at ${shortDateTime(new Date(),'shortOffset')}!`);
             }
             let cached = {};
             try {
