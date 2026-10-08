@@ -8,7 +8,11 @@ const cacheId = 'dpr-cache';
 const cacheMinutes = 120;
 const feedLength = 12;
 
-const matchCanonRegex = feeding.wordMatchRegex('canon');
+const matchCanonRegex = feeding.wordMatchRegex('canon', 'iu');
+const matchRFSRegex = feeding.wordMatchRegex('RF-S', 'u');
+const matchRFRegex = feeding.wordMatchRegex('RF-mount', 'u');
+const matchAmazonRegex = feeding.wordMatchRegex('Amazon', 'u'); // unwanted
+const matchBHRegex = feeding.wordMatchRegex('B&H', 'u'); // unwanted
 
 /**
  * Unwanted categories of posts to be ignored (lowercase)
@@ -18,7 +22,7 @@ const skipCategories = [
 ];
 
 /**
- * Returns if a post/item belongs to some unwanted category - or if for some other reason is unwanted
+ * Returns if a post/item belongs to some unwanted category - or if it for some other reason is unwanted
  * @param item {Object}
  * @returns {boolean}
  */
@@ -36,7 +40,12 @@ function isUnwanted(item) {
             }
         }
     }
-    return unwanted;
+    return( unwanted
+        || matchAmazonRegex.test(item.title ?? '')
+        || matchBHRegex.test(item.title ?? '')
+        || matchAmazonRegex.test(item.description ?? '')
+        || matchBHRegex.test(item.description ?? '')
+    );
 }
 
 /**
@@ -50,7 +59,13 @@ function filteredItemList(items, maxLength = feedLength) {
     for (const item of items) {
         if (item.categories?.some(category => matchCanonRegex.test(category.name))
             || matchCanonRegex.test(item.title ?? '')
+            || matchRFSRegex.test(item.title ?? '')
+            || matchRFRegex.test(item.title ?? '')
             || matchCanonRegex.test(item.description ?? '')
+            || matchRFSRegex.test(item.description ?? '')
+            || matchRFRegex.test(item.description ?? '')
+            || matchRFSRegex.test(item.content?.encoded ?? '')
+            || matchRFRegex.test(item.content?.encoded ?? '')
         ) {
             if (!isUnwanted(item)) {
                 if (filteredList.length < maxLength) filteredList.push(item);
@@ -86,7 +101,8 @@ async function feedItems() {
         cachedTime = new Date(cached.cachedTime);
     }
     if (cached?.cachedItems) {
-        cachedItems = filteredItemList(cached.cachedItems);
+        // cachedItems = filteredItemList(cached.cachedItems); // TODO: Kan ikke lave samme filtrering når .content er deleted !?!
+        cachedItems = cached.cachedItems;
     }
     // console.log(` 🤖 CACHED CONTENT FROM ${cachedTime} WAS READ`);
 
@@ -109,7 +125,7 @@ async function feedItems() {
     if (relevantItems.length) {
         if (feeding.arraysDiffers(relevantItems, cachedItems)) {
             if (relevantItems.length > cachedItems.length) {
-                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed!`);
+                console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed at ${shortDateTime(new Date(),'shortOffset')}!`);
             }
             let cached = {};
             try {
